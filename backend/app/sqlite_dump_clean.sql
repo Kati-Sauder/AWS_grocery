@@ -9,6 +9,7 @@ CREATE TABLE users (
 );
 INSERT INTO users VALUES(3,'testing_sqlite','testing_sqlite@gmail.com','scrypt:32768:8:1$ONPiHNaTT0AT6tXl$e94a9bda1b3b05339b2f1975a791c210068262f3b1eb9a14e5ee65af67bb17121646255f940172a1a51524afddbb06441613794a2a556bc393abc0644155cdf0','1,2','1,2','user_3_image.png');
 INSERT INTO users VALUES(4,'testing','testing@gmail.com','scrypt:32768:8:1$XbXY7BTk3hYQ3EXx$e2538a21d96c8152e75b8861ce5cd0e8cb627ee6ec826157eb734fde1b2a134d170a0801d6d68b90d3a1b00fdf24413dde8f5418aa8d19465603b9c1f615d709','1,2,3','1,2,3','user_4_pendo.png');
+
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,

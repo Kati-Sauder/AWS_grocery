@@ -47,3 +47,24 @@ variable "rds_password" {
   type        = string
   sensitive   = true
 }
+
+variable "invoice_bucket_name" {
+  type        = string
+  description = "Name des Invoice-Buckets"
+}
+
+variable "picture_bucket_name" {
+  type        = string
+  description = "Name des Avatare-Buckets"
+}
+
+variable "environment" {
+  type        = string
+  default     = "dev"
+  description = "Deployment Umgebung"
+}
+
+variable "sender_email" {
+  description = "Verifizierte Absenderadresse für SES"
+  type        = string
+}
