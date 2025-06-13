@@ -1,4 +1,5 @@
 variable "bucket_arn" {
-  description = "ARN des S3 Buckets"
+  description = "ARN of the S3 bucket (optional)"
   type        = string
+  default     = ""
 }

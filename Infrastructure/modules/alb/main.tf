@@ -1,5 +1,6 @@
-resource "aws_lb" "app_alb" {
-  name               = "app-alb"
+# Creates an application load balancer (ALB) that is publicly accessible
+resource "aws_lb" "grocery-mate_alb" {
+  name               = "grocery-mate-alb"
   internal           = false
   load_balancer_type = "application"
   subnets            = var.public_subnets
@@ -10,12 +11,14 @@ resource "aws_lb" "app_alb" {
   }
 }
 
-resource "aws_lb_target_group" "app_tg" {
-  name     = "app-tg"
+# Target group to which the ALB forwards requests - here port 80 (HTTP) for the app
+resource "aws_lb_target_group" "grocery-mate_tg" {
+  name     = "grocery-mate-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
+# Health Check checks whether EC2 instances are available
   health_check {
     path                = "/"
     interval            = 30
@@ -26,13 +29,15 @@ resource "aws_lb_target_group" "app_tg" {
   }
 }
 
+# Listener on port 80 - receives HTTP requests and forwards them to the target group
 resource "aws_lb_listener" "app_listener" {
-  load_balancer_arn = aws_lb.app_alb.arn
+  load_balancer_arn = aws_lb.grocery-mate_alb.arn
   port              = 80
   protocol          = "HTTP"
 
+# Forwarding to the target group
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.app_tg.arn
+    target_group_arn = aws_lb_target_group.grocery-mate_tg.arn
   }
 }

@@ -4,6 +4,21 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
+variable "az_public" {
+  description = "AZ for public subnet"
+  type        = string
+}
+
+variable "az_private_a" {
+  description = "AZ for private subnet A"
+  type        = string
+}
+
+variable "az_private_b" {
+  description = "AZ for private subnet B"
+  type        = string
+}
+
 variable "ami_id" {
   description = "AMI ID for EC2 instance"
   type        = string
@@ -50,21 +65,22 @@ variable "rds_password" {
 
 variable "invoice_bucket_name" {
   type        = string
-  description = "Name des Invoice-Buckets"
+  description = "Name of Invoice-Bucket"
 }
 
 variable "picture_bucket_name" {
   type        = string
-  description = "Name des Avatare-Buckets"
+  description = "Name of Picture-Bucket"
 }
 
 variable "environment" {
   type        = string
   default     = "dev"
-  description = "Deployment Umgebung"
+  description = "Deployment Environment"
 }
 
 variable "sender_email" {
-  description = "Verifizierte Absenderadresse für SES"
+  description = "Verified sender address for SES"
   type        = string
 }
+

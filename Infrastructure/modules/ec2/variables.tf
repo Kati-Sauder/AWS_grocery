@@ -1,5 +1,5 @@
 variable "subnet_id" {
-  description = "ID des Subnet"
+  description = "ID of the Subnet"
   type        = string
 }
 

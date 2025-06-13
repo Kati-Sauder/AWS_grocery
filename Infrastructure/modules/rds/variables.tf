@@ -1,30 +1,35 @@
 variable "rds_instance_class" {
-  description = "RDS-Instanzklasse"
+  description = "RDS-instance-class"
   type        = string
 }
 
 variable "rds_username" {
-  description = "RDS-Benutzername"
+  description = "RDS-username"
   type        = string
 }
 
 variable "rds_password" {
-  description = "RDS-Passwort"
+  description = "RDS-password"
   type        = string
   sensitive   = true
 }
 
 variable "subnet_ids" {
-  description = "Subnetz-IDs für RDS"
+  description = "Subnet-IDs for RDS"
   type        = list(string)
 }
 
 variable "ec2_sg_id" {
-  description = "Security Group ID von EC2"
+  description = "Security Group ID from EC2"
   type        = string
 }
 
 variable "vpc_id" {
-  description = "ID der VPC"
+  description = "ID of VPC"
+  type        = string
+}
+
+variable "rds_sg_id" {
+  description = "Security Group ID for RDS"
   type        = string
 }
