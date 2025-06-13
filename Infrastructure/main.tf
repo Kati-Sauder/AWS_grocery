@@ -22,6 +22,7 @@ provider "aws" {
 # module call "iam"
 module "iam" {
   source = "./modules/iam"
+  bucket_arn = module.s3.bucket_arn
 }
 
 # 2 S3 buckets, 1 for invoices and 1 for images (e.g. avatars, product images)

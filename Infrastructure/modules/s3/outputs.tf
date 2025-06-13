@@ -1,4 +1,4 @@
-output "invoice_bucket_arn" {
+output "bucket_arn" {
   value       = aws_s3_bucket.invoice-bucket.arn
   description = "ARN of Invoice-bucket"
 }
