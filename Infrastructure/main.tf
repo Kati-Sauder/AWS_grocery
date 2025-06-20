@@ -57,7 +57,8 @@ module "eventbridge" {
 module "network" {
   source     = "./modules/network"
   aws_region = var.aws_region
-  az_public      = var.az_public
+  az_public_a   = var.az_public-a
+  az_public_b   = var.az_public-b
   az_private_a   = var.az_private_a
   az_private_b   = var.az_private_b
 }
@@ -75,7 +76,7 @@ module "security" {
 # module call "ec2"
 module "ec2" {
   source                 = "./modules/ec2"
-  subnet_id              = module.network.public_subnet_id
+  subnet_id              = module.network.public_subnet_ids[0] # This gives it the first public subnet from the list.
   vpc_security_group_ids = [module.security.ec2_sg_id]
   iam_instance_profile   = module.iam.ec2_profile_name
   key_name               = var.key_name
@@ -99,7 +100,7 @@ module "rds" {
 module "alb" {
   source         = "./modules/alb"
   vpc_id         = module.network.vpc_id
-  public_subnets = [module.network.public_subnet_id]
+  public_subnets = module.network.public_subnet_ids
   alb_sg_id      = module.security.alb_sg_id
 }
 
@@ -111,7 +112,7 @@ module "asg" {
   instance_type        = "t2.micro"
   key_name             = var.key_name
   iam_instance_profile = module.iam.ec2_profile_name
-  public_subnets       = [module.network.public_subnet_id]
+  public_subnets       = module.network.public_subnet_ids
   ec2_sg_ids           = [module.security.ec2_sg_id]
   target_group_arn     = module.alb.target_group_arn
   user_data            = file("${path.module}/scripts/user_data.sh")

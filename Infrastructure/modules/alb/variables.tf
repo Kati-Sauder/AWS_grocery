@@ -10,6 +10,16 @@ variable "public_subnets" {
   description = "List of public subnet IDs"
 }
 
+variable "az_public-a" {
+  default = "eu-central-1a"
+  description = "First public subnet AZ"
+}
+
+variable "az_public-b" {
+  default = "eu-central-1b"
+  description = "Second public subnet AZ"
+}
+
 # Allows you to assign a specific security group to the ALB - and to change it easily if required.
 variable "alb_sg_id" {
   type        = string

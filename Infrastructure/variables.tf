@@ -4,8 +4,13 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
-variable "az_public" {
-  description = "AZ for public subnet"
+variable "az_public-a" {
+  description = "First AZ for public subnet"
+  type        = string
+}
+
+variable "az_public-b" {
+  description = "Second AZ for public subnet"
   type        = string
 }
 
