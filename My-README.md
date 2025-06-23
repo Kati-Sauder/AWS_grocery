@@ -63,7 +63,7 @@ The following diagram shows the architecture of the GroceryMate application, inc
 🔹 Amazon EventBridge connects application events to the Lambda function, enabling a decoupled, event-driven workflow
 
 ## ⚙️ Terraform Configuration
-![Architecture](assets/terraform-modules.png)
+![Architecture](infrastructure/assets/terraform-modules.png)
 ## 🧩 Terraform modules 
 The infrastructure was built using a modular Terraform structure to ensure scalability, reusability, and maintainability. Each module  encapsulates a specific component of the system, allowing for clear separation of concerns.
 
