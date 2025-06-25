@@ -4,24 +4,11 @@ Infrastructure & Deployment of the AWS GroceryMate App
 ##  Table of Contents 
 
 - [📋 Overview](#-overview)
+- [⚙️ Terraform configuration](#-terraform-configuration)
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
-- [⚙️ Components of Infrastructure](#-components-of-infrastructure-)
-- [🔩 Terraform configuration](#-terraform-configuration)
-- [🧩 Terraform modules](#-terraform-modules-)
-  - [⚖️ ALB](#-alb)
-  - [📈 ASG](#-asg-)
-  - [💻 EC2](#-ec2-)
-  - [🚌 EventBridge](#-eventbridge-)
-  - [🥷🏼 IAM](#-iam-)
-  - [💡 Lambda](#-lambda-)
-  - [🌐 Network](#-network-)
-  - [🗄 RDS](#-rds-)
-  - [🪣 S3](#-s3-)
-  - [🔐 Security](#-security-)
-- [⚡️Event Trigger & Lambda Function](#event-trigger--lambda-function)
+- [🔩 Terraform Architecture](#-terraform-architecture)
+- [⚡️Event Trigger & Lambda Function](#event-trigger--lambda-function---theoretical-setup)
 - [🔧 Deployment & Installation](#-deployment--installation)
-- [💸 Cost Monitoring](#-cost-monitoring)
-- [🧠 Ideas & Enhancements for the Future](#-ideas--enhancements-for-the-future)
 
 ## 📋 Overview
 This project is part of the Cloud Track program of Masterschool's Software Engineering Bootcamp. An e-commerce application called GroceryMate was developed by one of our mentors and tutors [Alejandro Roman Ibanez](https://github.com/AlejandroRomanIbanez/AWS_grocery). *"GroceryMate is a modern, full-featured e-commerce platform designed for seamless online grocery shopping."* 
@@ -30,103 +17,185 @@ The app served as the foundation for exploring various deployment scenarios in t
 
 This forked repository focuses on the infrastructure aspects of the GroceryMate application — including modular components such as ALB, ASG, Lambda, RDS, and more — all orchestrated and provisioned through Terraform.
 
-## 🏢 Visualization of architecture 
-The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
-
-## 🔩 Components of Infrastructure 
-**Networking & Security**
-
-🔹 A dedicated Virtual Private Cloud (VPC) with clearly separated public and private subnets
-
-🔹 Internet Gateway to control outbound internet access from private resources
-
-🔹 Security Groups and IAM roles defined to enforce the principle of least privilege, including roles for EC2 and Lambda
-
-**Compute & Load Balancing**
-
-🔹 An Auto Scaling Group (ASG) dynamically manages EC2 instances running the GroceryMate frontend/backend
-
-🔹 An Application Load Balancer (ALB) distributes incoming HTTP traffic across available instances
-
-🔹 The EC2 application server is deployed in a public subnet and can be accessed securely via SSH, restricted by IP-based Security Group rules
-
-**Database & Storage**
-
-🔹 Amazon RDS (PostgreSQL) is provisioned in private subnets for secure and persistent data storage
-
-🔹 Amazon S3 is used for two purposes: storing product and user images, and managing invoice files processed by Lambda functions
-
-**Serverless & Event-Driven Architecture**
-
-🔹 An AWS Lambda function is triggered by events (e.g. order completion) to handle invoice generation and storage
-
-🔹 Amazon EventBridge connects application events to the Lambda function, enabling a decoupled, event-driven workflow
+Since I am still learning, this repo mainly focuses on exactly that. This is why I commented my code. A lot. I want to explain what I did and share this with others who want to learn as well. 
 
 ## ⚙️ Terraform Configuration
 ![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/terraform-modules.png)
-## 🧩 Terraform modules 
-The infrastructure was built using a modular Terraform structure to ensure scalability, reusability, and maintainability. Each module  encapsulates a specific component of the system, allowing for clear separation of concerns.
 
-I went modular because it just makes life easier! Breaking the infrastructure into focused pieces means you can update, debug, or even reuse parts without messing with the whole setup. It’s like having LEGO blocks instead of one giant monolith.
-### ⚖️ ALB
-Deploys an Application Load Balancer (ALB).
-Configures listeners and target groups for routing traffic.
-The Load Balancer distributes traffic efficiently and supports automatic scaling, which is crucial for handling varying e-commerce traffic loads.
-### 📈 ASG 
-Manages the Auto Scaling Group (ASG) for EC2 instances.
-The Auto Scaling Group keeps the app running smoothly by automatically adjusting the number of EC2 instances based on demand — so you get reliable performance without wasting resources or paying for idle servers.
+## 🏢 Visualization of architecture 
 
-### 💻 Ec2 
-Creates and configures EC2 instances used by the application.
-Assigns security groups and IAM roles.
+The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
+![Architecture](infrastructure/assets/Grocery Mate Architektur.png)
 
-Why EC2 and not fully serverless? Well, EC2 with an Auto Scaling Group gives you full control over the app servers. For an e-commerce app like GroceryMate, this means we can handle stateful processes, customize the environment exactly how we want it, and troubleshoot more easily. Plus, with ASG and the Application Load Balancer, the app scales smoothly with demand — whether it’s a quiet day or a shopping spree.
+## 🔩 Terraform Architecture
 
-### 🚌 EventBridge 
-Sets up EventBridge rules to trigger Lambda functions based on events.
+🧠 **Why This Architecture?**
 
-Here I didn’t ignore serverless completely. EventBridge and Lambda functions are perfect for smaller, event-driven tasks like processing invoices. They keep the app lean by only running when needed, saving costs and complexity.
+When building the infrastructure for GroceryMate, I wanted something that wasn’t just functional — it had to be secure, scalable, cost-conscious, and easy to manage in the long run. So I went with a modular Terraform setup, where each piece of the infrastructure lives in its own module. Think of it like LEGO bricks: clean, reusable, and easy to rearrange when needed.
 
-### 🥷🏼 IAM 
-Defines IAM roles and policies for EC2 and Lambda permissions.
+🚦 **Scalability & Availability**
 
-Defining fine-grained IAM roles and Security Groups enforces the principle of least privilege and protects resources.
+To keep the app responsive no matter the traffic, I used an Auto Scaling Group for EC2 instances, fronted by an Application Load Balancer (ALB). The ALB smartly routes traffic to healthy instances, while the ASG automatically spins up or down servers based on demand. That way, the app can handle anything from one shopper to a full-on Black Friday rush — without overspending on idle capacity.
 
-### 💡 Lambda
-Deploys Lambda functions, including roles and access permissions.
+🧰 **Why EC2 (and not Fully Serverless)?**
 
-### 🌐 Network 
-Creates the VPC, public and private subnets, Internet Gateway, and routing.
+I did use Lambda and EventBridge for small, event-driven tasks like invoice processing — but for the core application, I went with EC2 because of having full control. EC2 lets me configure the environment exactly the way I want, handle stateful processes more easily, and dig deep when debugging. Combined with ASG and ALB, it still scales smoothly while giving flexibility.
 
-On the networking side, I set up a VPC with public and private subnets to keep things secure. The database (PostgreSQL on RDS) lives safely in the private subnet, away from the public internet, so the customer data stays protected.
-### 🗄 RDS 
-Deploys the PostgreSQL RDS instance in private subnets with security groups.
+🔐 **Security**
 
-Using RDS (PostgreSQL) provides a reliable, managed relational database suitable for the complex transactions and relationships in an e-commerce app.
+Security wasn’t an afterthought. I set up dedicated Security Groups for each major component — EC2, RDS, ALB — and tightly controlled who can talk to what. For example, EC2 only accepts traffic from the ALB. RDS sits safely in a private subnet, only accessible by EC2. IAM roles are finely tuned for least-privilege access, so resources only do what they’re supposed to — and nothing more.
 
-### 🪣 S3 
-Creates S3 buckets for static assets and Terraform state storage.
+🌐 **Networking**
 
-S3 buckets handle static assets and store Terraform state, giving us scalable and reliable storage that plays nicely with the rest of AWS.
+The app lives in a VPC with public and private subnets. Public-facing parts (like the ALB) go into the public subnet, while sensitive stuff (like the database) stays tucked away in the private one. There’s also routing and gateways in place to ensure secure, controlled access to the outside world.
 
-### 🔐 Security 
-Defines security groups for EC2, RDS, ALB, and other components.
+💾 **Storage & State**
 
-On the security side, I’ve set up dedicated Security Groups for each major component: EC2, RDS, and the Application Load Balancer. This way, each resource only accepts the network traffic it really needs. For example, EC2 instances only allow incoming connections from the ALB, keeping direct access tightly controlled. The RDS database lives in a private subnet and only accepts traffic from the EC2 Security Group, so it’s locked down from everything else.
+I’m using S3 buckets to store static assets (like user avatars) and manage Terraform state. It’s reliable and integrates beautifully with the rest of the AWS ecosystem.
 
-***
-This mix of serverless and infrastructure gives us the best of both worlds: keeping costs down, boosting performance, and making everything easier to maintain for a real-life e-commerce app.
+🧱 **In Short**
 
-## ⚡️Event Trigger & Lambda Function
+This architecture blends the best of both worlds — traditional compute with serverless, tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
+
+## ⚡️Event Trigger & Lambda Function - Theoretical Setup
+
+In this setup, I’ve added AWS EventBridge and a Lambda function to demonstrate how a serverless event-driven workflow could look in a production e-commerce architecture.
+
+The idea is:
+When a customer places an order (OrderPlaced event from the source grocery-mate.app), EventBridge would catch the event and trigger a Lambda function named generate_invoice. That function could then automatically generate and store a PDF invoice in an S3 bucket.
+
+However...
+
+Right now, this is more of a conceptual showcase than a working solution:
+
+The GroceryMate app isn’t emitting actual events to EventBridge yet — so nothing gets triggered in practice.
+
+The Lambda function itself is deployed via Terraform, but it relies on a file called lambda_function_payload.zip, which isn’t created automatically.
+
+So unless you manually zip the code and put it in the right folder, Terraform will throw an error during apply.
+
+In other words, it needs a few adjustments and a lot more to learn for me!
+
+**Future Improvements**
+
+Here’s what could be improved to make this part of the infrastructure fully functional:
+
+Integrate the app with EventBridge so that it sends real OrderPlaced events — perhaps through API Gateway.
+
+Automate the Lambda packaging as part of a CI/CD pipeline (or use a tool to build the zip automatically).
+
+Optionally, use Step Functions if invoice creation involves multiple steps or systems.
+
+Add proper error handling, retries, and monitoring for the Lambda function (e.g. CloudWatch alerts).
+
+Soooo...it's a piece of work still ;) 
 
 ## 🔧 Deployment & Installation
 
-## 💸 Cost Monitoring
+**Prerequisites**
 
-## 🧠 Ideas & Enhancements for the Future
+🔹 Python (at least version 3.11) – For the backend 
+
+🔹 PostgreSQL – Database
+
+🔹 Terraform – Infrastructure 
+
+🔹 AWS CLI – Interact with AWS services using commands in your terminal or shell
 
 
+**Clone Repository**
+```bash
+git clone https://github.com/Kati-Sauder/AWS_grocery/tree/version2
 
+cd AWS_grocery
+```
+**Deploy Cloud Infrastructure**
+```bash
+cd infrastructure
 
+terraform init
 
+terraform plan
 
+terraform apply 
+```
+
+**Connect to the Instance**
+```bash
+ssh -i /path/to/your-key.pem ec2-user@your-ec2-public-ip
+```
+**Update the System & install essential Software**
+```bash
+sudo yum update -y
+sudo yum install -y git python3 python3-pip postgresql15 postgresql15-server postgresql15-contrib
+```
+**Verify installation**
+```bash
+git --version
+python3 --version
+pip --version
+psql --version
+```
+**Configure PostgreSQL**
+
+Create database and user:
+```bash
+psql -U postgres -c "CREATE DATABASE grocerymate_db;"
+psql -U postgres -c "CREATE USER grocery_user WITH ENCRYPTED PASSWORD '<your_secure_password>';"  # Replace <your_secure_password> with a strong password of your choice
+psql -U postgres -c "ALTER USER grocery_user WITH SUPERUSER;"
+```
+**Populate Database**
+```bash
+psql -U grocery_user -d grocerymate_db -c "SELECT * FROM users;"
+psql -U grocery_user -d grocerymate_db -c "SELECT * FROM products;"
+```
+
+**Set up Python environment**
+
+Install dependencies in an activated virtual environment:
+```bash
+cd backend
+pip install -r requirements.txt
+```
+**Set up environment variables**
+
+Create a secure JWT key and safe it:
+```bash
+python3 -c "import secrets; print(secrets.token_hex(32))"
+```
+**Create an .env file**
+```bash
+touch .env"
+```
+Then, populate it with the required environment variables (make sure to replace the passwords <grocery_test> with your own):
+
+```bash
+echo "JWT_SECRET_KEY="your-key-here >> .env
+echo "POSTGRES_USER=grocery_user" >> .env
+echo "POSTGRES_PASSWORD=<grocery_test>" >> .env
+echo "POSTGRES_DB=grocerymate_db" >> .env
+echo "POSTGRES_HOST=localhost" >> .env
+echo "POSTGRES_URI=postgresql://grocery_user:<grocery_test>@localhost:5432/grocerymate_db" >> .env
+```
+**Application Configuration**
+
+Since the application is running inside Docker, we must pass the environment variables dynamically (replace placeholders):
+```bash
+docker run --network host \
+  -e S3_BUCKET_NAME=bucket_name \
+  -e S3_REGION=region_name \
+  -e USE_S3_STORAGE=true \
+  -e POSTGRES_USER=grocery_user \
+  -e POSTGRES_PASSWORD=your_password \
+  -e POSTGRES_DB=db_name \
+  -e POSTGRES_HOST=grocery-mate-db.czyueaksagjt.eu-central-1.rds.amazonaws.com \
+  -e POSTGRES_URI=postgresql://<your_psql_user>:<your_psql_password>@$<your-rds-endpoint>:5432/$<your_psql_db> \
+  -e JWT_SECRET_KEY=your_secret_key \
+  -e SECRET_KEY=your_secret_key \
+  -p 5000:5000 grocerymate
+```
+
+**Access the Application**
+```bash
+http://<EC2_PUBLIC_IP>:5000
+```

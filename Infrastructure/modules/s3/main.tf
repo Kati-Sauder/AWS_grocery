@@ -7,17 +7,23 @@ resource "aws_s3_bucket" "picture-bucket" {
     Environment = var.environment
   }
 }
-
-# Blocks public access to the bucket defined above
-resource "aws_s3_bucket_public_access_block" "block_public" {
+# Allows public access to avatars folder
+resource "aws_s3_bucket_policy" "avatars_public_read" {
   bucket = aws_s3_bucket.picture-bucket.id
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AllowPublicReadAccessToAvatars",
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "s3:GetObject",
+        Resource  = "${aws_s3_bucket.picture-bucket.arn}/avatars/*"
+      }
+    ]
+  })
 }
-
 # Creates another S3 bucket for generated invoices
 resource "aws_s3_bucket" "invoice-bucket" {
   bucket = var.bucket_name
