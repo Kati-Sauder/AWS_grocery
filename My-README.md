@@ -25,7 +25,7 @@ Since I am still learning, this repo mainly focuses on exactly that. This is why
 ## 🏢 Visualization of architecture 
 
 The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
-![Architecture](infrastructure/assets/Grocery Mate Architektur.png)
+![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Grocery%20Mate%20Architektur.png)
 
 ## 🔩 Terraform Architecture
 
