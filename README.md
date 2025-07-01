@@ -109,6 +109,30 @@ git clone https://github.com/Kati-Sauder/AWS_grocery/tree/version2
 
 cd AWS_grocery
 ```
+**Install AWS CLI**
+```bash
+brew install awscli
+```
+Verify installation with
+```bash
+aws --version
+```
+**Configure AWS CLI for SSO Authentication**
+```bash
+aws configure sso
+```
+Please read https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html for further information.
+
+**Logging in to AWS SSO**
+```bash
+aws sso login
+```
+**Verify Your AWS Credentials**
+```bash
+aws sts get-caller-identity
+```
+Since your AWS credentials are temporary, you may need to re-authenticate periodically by running aws sso login again.
+
 **Deploy Cloud Infrastructure**
 ```bash
 cd infrastructure
@@ -165,7 +189,7 @@ python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
 **Create an .env file**
 ```bash
-touch .env"
+touch .env
 ```
 Then, populate it with the required environment variables (make sure to replace the passwords <grocery_test> with your own):
 
