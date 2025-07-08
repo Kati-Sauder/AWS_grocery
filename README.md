@@ -18,12 +18,6 @@ This forked repository focuses on the infrastructure aspects of the GroceryMate 
 
 Since I am still learning, this repo mainly focuses on exactly that. This is why I commented my code. A lot. I want to explain what I did and share this with others who want to learn as well. 
 
-## ⚙️ Terraform Configuration
-
-The following diagram shows a simple overview of the infrastructure.
-
-![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Terraform%20Modules%20Diagram.png)
-
 ## 🏢 Visualization of architecture 
 
 The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
