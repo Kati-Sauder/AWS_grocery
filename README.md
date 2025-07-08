@@ -20,13 +20,14 @@ Since I am still learning, this repo mainly focuses on exactly that. This is why
 
 ## ⚙️ Terraform Configuration
 
-Changed the confis (deleted 2 modules), diagram will be updated. 
+The following diagram shows a simple overview of the infrastructure.
 
-![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/terraform-modules.png)
+![Architecture]()
 
 ## 🏢 Visualization of architecture 
 
 The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
+
 ![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Grocery%20Mate%20App%20Architektur.png)
 
 ## 🔩 Terraform Architecture
@@ -57,7 +58,7 @@ I’m using an S3 bucket to store static assets (like user avatars) and manage T
 
 🧱 **In Short**
 
-This architecture blends the best of both worlds — traditional compute with serverless, tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
+This architecture is solid — tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
 
 
 ## 🔧 Deployment & Installation
