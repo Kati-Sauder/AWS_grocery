@@ -22,7 +22,7 @@ Since I am still learning, this repo mainly focuses on exactly that. This is why
 
 The following diagram shows a simple overview of the infrastructure.
 
-![Architecture]()
+![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Terraform%20Modules%20Diagram.png)
 
 ## 🏢 Visualization of architecture 
 
