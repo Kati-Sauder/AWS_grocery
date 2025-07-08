@@ -1,3 +1,4 @@
+/*
 # Returns the name of the Auto Scaling Group.
 # So that you can reference it in other modules or use it for error analysis.
 output "asg_name" {
@@ -18,3 +19,4 @@ output "launch_template_version" {
   description = "Version des Launch Templates"
   value       = aws_launch_template.grocery-mate_lt.latest_version
 }
+*/

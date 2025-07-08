@@ -1,3 +1,4 @@
+/*
 variable "ami_id" {
   type        = string
   description = "AMI-ID for EC2-instances in the Auto Scaling Group"
@@ -38,3 +39,4 @@ variable "user_data" {
   default     = ""
   description = "Optional script for User Data"
 }
+*/

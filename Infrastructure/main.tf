@@ -1,5 +1,5 @@
 # This Terraform root module orchestrates a complete cloud setup for an e-commerce application (GroceryMate),
-# consisting of modularized components for network, security, compute, database, serverless eventing and more.
+# consisting of modularized components for network, security, compute, database and more.
 # The goal is to provide infrastructure as code in a clearly structured, reusable and maintainable way.
 
 # Initialize Terraform
@@ -18,38 +18,18 @@ provider "aws" {
   region = var.aws_region
 }
 
-# IAM roles and profiles, incl. Lambda access to S3
+# IAM roles and profiles (e.g. for EC2 Instance Connect)
 # module call "iam"
 module "iam" {
   source = "./modules/iam"
-  bucket_arn = module.s3.bucket_arn
 }
 
-# 2 S3 buckets, 1 for invoices and 1 for images (e.g. avatars, product images)
+# S3 bucket for images (e.g. avatars, product images)
 # module call "s3"
 module "s3" {
   source         = "./modules/s3"
-  bucket_name    = var.invoice_bucket_name
   s3_bucket_name = var.picture_bucket_name
   environment    = var.environment
-  lambda_role_arn    = module.iam.lambda_role_arn
-}
-
-# Lambda function for invoice processing (e.g. PDF generation & storage)
-# module call "lambda"
-module "lambda" {
-  source           = "./modules/lambda"
-  bucket_name      = var.invoice_bucket_name
-  sender_email     = var.sender_email
-  lambda_role_arn  = module.iam.lambda_role_arn
-}
-
-# EventBridge rule for connecting events to the Lambda function
-#module  call "eventbridge"
-module "eventbridge" {
-  source          = "./modules/eventbridge"
-  lambda_arn      = module.lambda.lambda_function_arn
-  lambda_name     = module.lambda.lambda_function_name
 }
 
 # VPC, subnets & Internet gateway (basis for network communication)
@@ -104,6 +84,7 @@ module "alb" {
   alb_sg_id      = module.security.alb_sg_id
 }
 
+/*
 # Autoscaling Group for high availability & scaling of the app server
 # module call "asg"
 module "asg" {
@@ -117,3 +98,4 @@ module "asg" {
   target_group_arn     = module.alb.target_group_arn
   user_data            = file("${path.module}/scripts/user_data.sh")
 }
+*/

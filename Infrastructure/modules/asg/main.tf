@@ -1,3 +1,4 @@
+/*
 # Creates a launch template configuration for EC2 instances in the Auto Scaling Group.
 resource "aws_launch_template" "grocery-mate_lt" {
   name_prefix   = "grocery-mate-lt-"
@@ -37,3 +38,4 @@ resource "aws_autoscaling_group" "app_asg" {
     propagate_at_launch = true
   }
 }
+*/

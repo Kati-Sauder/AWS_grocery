@@ -68,11 +68,6 @@ variable "rds_password" {
   sensitive   = true
 }
 
-variable "invoice_bucket_name" {
-  type        = string
-  description = "Name of Invoice-Bucket"
-}
-
 variable "picture_bucket_name" {
   type        = string
   description = "Name of Picture-Bucket"
@@ -84,8 +79,4 @@ variable "environment" {
   description = "Deployment Environment"
 }
 
-variable "sender_email" {
-  description = "Verified sender address for SES"
-  type        = string
-}
 
