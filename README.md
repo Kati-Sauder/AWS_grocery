@@ -7,7 +7,6 @@ Infrastructure & Deployment of the AWS GroceryMate App
 - [⚙️ Terraform configuration](#-terraform-configuration)
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
 - [🔩 Terraform Architecture](#-terraform-architecture)
-- [⚡️Event Trigger & Lambda Function](#event-trigger--lambda-function---theoretical-setup)
 - [🔧 Deployment & Installation](#-deployment--installation)
 
 ## 📋 Overview
@@ -20,12 +19,15 @@ This forked repository focuses on the infrastructure aspects of the GroceryMate 
 Since I am still learning, this repo mainly focuses on exactly that. This is why I commented my code. A lot. I want to explain what I did and share this with others who want to learn as well. 
 
 ## ⚙️ Terraform Configuration
+
+Changed the confis (deleted 2 modules), diagram will be updated. 
+
 ![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/terraform-modules.png)
 
 ## 🏢 Visualization of architecture 
 
 The following diagram shows the architecture of the GroceryMate application, including core AWS services and their interactions.
-![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Grocery%20Mate%20Architektur%20(light).png)
+![Architecture](https://github.com/Kati-Sauder/AWS_grocery/blob/version2/Infrastructure/assets/Grocery%20Mate%20App%20Architektur.png)
 
 ## 🔩 Terraform Architecture
 
@@ -37,9 +39,9 @@ When building the infrastructure for GroceryMate, I wanted something that wasn�
 
 To keep the app responsive no matter the traffic, I used an Auto Scaling Group for EC2 instances, fronted by an Application Load Balancer (ALB). The ALB smartly routes traffic to healthy instances, while the ASG automatically spins up or down servers based on demand. That way, the app can handle anything from one shopper to a full-on Black Friday rush — without overspending on idle capacity.
 
-🧰 **Why EC2 (and not Fully Serverless)?**
+🧰 **Why EC2?**
 
-I did use Lambda and EventBridge for small, event-driven tasks like invoice processing — but for the core application, I went with EC2 because of having full control. EC2 lets me configure the environment exactly the way I want, handle stateful processes more easily, and dig deep when debugging. Combined with ASG and ALB, it still scales smoothly while giving flexibility.
+For the core application, I went with EC2 because of having full control. EC2 lets me configure the environment exactly the way I want, handle stateful processes more easily, and dig deep when debugging. Combined with ASG and ALB, it still scales smoothly while giving flexibility.
 
 🔐 **Security**
 
@@ -51,44 +53,12 @@ The app lives in a VPC with public and private subnets. Public-facing parts (lik
 
 💾 **Storage & State**
 
-I’m using S3 buckets to store static assets (like user avatars) and manage Terraform state. It’s reliable and integrates beautifully with the rest of the AWS ecosystem.
+I’m using an S3 bucket to store static assets (like user avatars) and manage Terraform state. It’s reliable and integrates beautifully with the rest of the AWS ecosystem.
 
 🧱 **In Short**
 
 This architecture blends the best of both worlds — traditional compute with serverless, tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
 
-## ⚡️Event Trigger & Lambda Function - Theoretical Setup
-
-In this setup, I’ve added AWS EventBridge and a Lambda function to demonstrate how a serverless event-driven workflow could look in a production e-commerce architecture.
-
-The idea is:
-When a customer places an order (OrderPlaced event from the source grocery-mate.app), EventBridge would catch the event and trigger a Lambda function named generate_invoice. That function could then automatically generate and store a PDF invoice in an S3 bucket.
-
-However...
-
-Right now, this is more of a conceptual showcase than a working solution:
-
-The GroceryMate app isn’t emitting actual events to EventBridge yet — so nothing gets triggered in practice.
-
-The Lambda function itself is deployed via Terraform, but it relies on a file called lambda_function_payload.zip, which isn’t created automatically.
-
-So unless you manually zip the code and put it in the right folder, Terraform will throw an error during apply.
-
-In other words, it needs a few adjustments and a lot more to learn for me!
-
-**Future Improvements**
-
-Here’s what could be improved to make this part of the infrastructure fully functional:
-
-Integrate the app with EventBridge so that it sends real OrderPlaced events — perhaps through API Gateway.
-
-Automate the Lambda packaging as part of a CI/CD pipeline (or use a tool to build the zip automatically).
-
-Optionally, use Step Functions if invoice creation involves multiple steps or systems.
-
-Add proper error handling, retries, and monitoring for the Lambda function (e.g. CloudWatch alerts).
-
-Soooo...it's a piece of work still ;) 
 
 ## 🔧 Deployment & Installation
 
