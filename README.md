@@ -7,6 +7,7 @@ Infrastructure & Deployment of the AWS GroceryMate App
 - [⚙️ Terraform configuration](#-terraform-configuration)
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
 - [🔩 Terraform Architecture](#-terraform-architecture)
+- [🚜 Creating the Auto Scaling Group (Without a Launch Template at First)](#-creating-the-auto-scaling-group-without-a-launch-template-at-first)
 - [💡 Ideas and improvements for the future](#-ideas-and-improvements-for-the-future)
 - [🔧 Deployment & Installation](#-deployment--installation)
 
@@ -55,10 +56,55 @@ I’m using an S3 bucket to store static assets (like user avatars) and manage T
 
 This architecture is solid — tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
 
+## 🚜 Creating the Auto Scaling Group (Without a Launch Template at First)
+Since this project is all about learning and building things incrementally, I wanted to explain how I approached the Auto Scaling Group (ASG) setup — especially in a scenario where we don’t have a launch template or machine image right away.
+
+Here’s the process I followed:
+
+**Start with all core infrastructure**
+
+First, I used Terraform to create everything except the Auto Scaling Group. That includes:
+
+- VPC, subnets, routing
+
+- ALB and target groups
+
+- Security groups
+
+- EC2 instance (manually defined)
+
+- IAM roles, S3 bucket, RDS, etc.
+
+**Comment out the ASG module**
+
+In the beginning, I left the ASG module commented out in the Terraform config. Why?
+Because I needed to launch and configure the EC2 instance manually first, so I could build a proper AMI (Amazon Machine Image) from it.
+
+**Manually configure and test the EC2 instance**
+
+Once the EC2 instance was up, I connected via SSH and manually installed and configured the application stack (e.g., backend server, app files, dependencies).
+
+**Create an AMI (Image) from the EC2 instance**
+
+After verifying everything worked, I created a custom AMI from that instance. This image captures the full application state — ready to be cloned as needed.
+
+**Re-enable the ASG module and provide the AMI ID**
+
+With the image ready, I uncommented the ASG module and passed in the AMI ID.
+Now Terraform could spin up as many instances as needed, using that same pre-baked configuration.
+
+**Test scaling behavior**
+
+Finally, I tested the scaling policies by tweaking CPU thresholds and verifying that the ASG adds or removes instances as expected.
+
+This step-by-step approach helped me fully understand what’s happening behind the scenes — and made debugging much easier before introducing automation through launch templates.
+
 ## 💡 Ideas and improvements for the future
 One feature I’d like to add in the future is automated invoice creation using Amazon EventBridge and AWS Lambda. The idea was to trigger an event (e.g. after a successful checkout or order confirmation), which would invoke a Lambda function to generate an invoice and then store it in an S3 bucket.
 
 This event-driven architecture would help decouple responsibilities, make the system more modular, and allow for future extensions like sending email receipts or tracking user activity. While this setup wasn’t fully implemented in this version of the project, it remains on my roadmap as a next step to explore more serverless patterns in AWS.
+
+Further I want and need to learn how to build good launch templates for ASG to decrease manual processes, save time and avoid mistakes. 
 
 ## 🔧 Deployment & Installation
 
@@ -192,4 +238,37 @@ docker run --network host \
 **Access the Application**
 ```bash
 http://<EC2_PUBLIC_IP>:5000
+```
+
+**Create a Reusable AMI (Amazon Machine Image)**
+
+Once the EC2 instance is fully configured and the application is running as expected, you can create an AMI from it. This image will serve as the base for launching identical instances through an Auto Scaling Group.
+
+- Go to the EC2 Dashboard in the AWS Console
+
+- Select your running instance
+
+- Click Actions → Image and templates → Create image
+
+- Provide a name and optional description
+
+- Keep the rest of the settings as default and click Create image
+
+- After a few minutes, your AMI will be available under AMIs in the EC2 section.
+
+--> Note down the AMI ID — you will need it in your Terraform configuration for the Auto Scaling Group.
+
+**Re-enable the Auto Scaling Group Module**
+
+Once your AMI is ready:
+
+- Uncomment your ASG module in Terraform
+
+- Make sure it references the correct AMI ID
+
+- Apply your infrastructure again:
+
+```bash
+terraform plan
+terraform apply
 ```
