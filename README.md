@@ -7,8 +7,8 @@ Infrastructure & Deployment of the AWS GroceryMate App
 - [⚙️ Terraform configuration](#-terraform-configuration)
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
 - [🔩 Terraform Architecture](#-terraform-architecture)
-- [🔧 Deployment & Installation](#-deployment--installation)
 - [💡 Ideas and improvements for the future](#-ideas-and-improvements-for-the-future)
+- [🔧 Deployment & Installation](#-deployment--installation)
 
 ## 📋 Overview
 This project is part of the Cloud Track program of Masterschool's Software Engineering Bootcamp. An e-commerce application called GroceryMate was developed by one of our mentors and tutors [Alejandro Roman Ibanez](https://github.com/AlejandroRomanIbanez/AWS_grocery). *"GroceryMate is a modern, full-featured e-commerce platform designed for seamless online grocery shopping."* 
