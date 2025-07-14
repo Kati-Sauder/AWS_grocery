@@ -8,6 +8,7 @@ Infrastructure & Deployment of the AWS GroceryMate App
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
 - [🔩 Terraform Architecture](#-terraform-architecture)
 - [🔧 Deployment & Installation](#-deployment--installation)
+- [💡 Ideas and improvements for the future](#-ideas-and-improvements-for-the-future)
 
 ## 📋 Overview
 This project is part of the Cloud Track program of Masterschool's Software Engineering Bootcamp. An e-commerce application called GroceryMate was developed by one of our mentors and tutors [Alejandro Roman Ibanez](https://github.com/AlejandroRomanIbanez/AWS_grocery). *"GroceryMate is a modern, full-featured e-commerce platform designed for seamless online grocery shopping."* 
@@ -54,6 +55,10 @@ I’m using an S3 bucket to store static assets (like user avatars) and manage T
 
 This architecture is solid — tight security with high availability, and cost-efficiency with flexibility. It's built for the real-world demands of an e-commerce app, while staying clean, modular, and ready for future tweaks.
 
+## 💡 Ideas and improvements for the future
+One feature I’d like to add in the future is automated invoice creation using Amazon EventBridge and AWS Lambda. The idea was to trigger an event (e.g. after a successful checkout or order confirmation), which would invoke a Lambda function to generate an invoice and then store it in an S3 bucket.
+
+This event-driven architecture would help decouple responsibilities, make the system more modular, and allow for future extensions like sending email receipts or tracking user activity. While this setup wasn’t fully implemented in this version of the project, it remains on my roadmap as a next step to explore more serverless patterns in AWS.
 
 ## 🔧 Deployment & Installation
 
