@@ -16,7 +16,7 @@ This project is part of the Cloud Track program of Masterschool's Software Engin
 
 The app served as the foundation for exploring various deployment scenarios in the AWS cloud. Throughout the course, we incrementally built a complete cloud architecture using Terraform to define infrastructure as code.
 
-This forked repository focuses on the infrastructure aspects of the GroceryMate application — including modular components such as ALB, ASG, Lambda, RDS, and more — all orchestrated and provisioned through Terraform.
+This forked repository focuses on the infrastructure aspects of the GroceryMate application — including modular components such as ALB, ASG, RDS, and more — all orchestrated and provisioned through Terraform.
 
 Since I am still learning, this repo mainly focuses on exactly that. This is why I commented my code. A lot. I want to explain what I did and share this with others who want to learn as well. 
 
