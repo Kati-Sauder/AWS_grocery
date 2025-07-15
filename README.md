@@ -4,7 +4,6 @@ Infrastructure & Deployment of the AWS GroceryMate App
 ##  Table of Contents 
 
 - [📋 Overview](#-overview)
-- [⚙️ Terraform configuration](#-terraform-configuration)
 - [🏢 Visualization of architecture](#-visualization-of-architecture-)
 - [🔩 Terraform Architecture](#-terraform-architecture)
 - [🚜 Creating the Auto Scaling Group (Without a Launch Template at First)](#-creating-the-auto-scaling-group-without-a-launch-template-at-first)
